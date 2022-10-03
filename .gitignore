@@ -42,3 +42,11 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+AndroidManifest.xml
+AppDelegate.m
+AppDelegate.swift
+
+android/app/src/main/AndroidManifest.xml
+ios/Runner/AppDelegate.m
+ios/Runner/AppDelegate.swift
