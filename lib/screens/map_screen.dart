@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_maps_app/blocs/blocs.dart';
 import 'package:flutter_maps_app/views/views.dart';
 import 'package:flutter_maps_app/widgets/widgets.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class MapScreen extends StatefulWidget {
   const MapScreen({Key? key}) : super(key: key);
@@ -13,6 +14,7 @@ class MapScreen extends StatefulWidget {
 
 class _MapScreenState extends State<MapScreen> {
   late LocationBloc locationBloc;
+
   @override
   void initState() {
     super.initState();
@@ -29,22 +31,39 @@ class _MapScreenState extends State<MapScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: BlocBuilder<LocationBloc, LocationState>(builder: (context, state) {
-        if (state.lastKnownLocation == null) {
+      body: BlocBuilder<LocationBloc, LocationState>(
+          builder: (context, locationState) {
+        if (locationState.lastKnownLocation == null) {
           return const Center(child: Text('Espere por favor.'));
         }
 
-        return SingleChildScrollView(
-            child: Stack(
-          children: [
-            MapView(initialLocation: state.lastKnownLocation!),
-          ],
-        ));
+        return BlocBuilder<MapBloc, MapState>(
+          builder: (context, mapState) {
+            Map<String, Polyline> polylines = Map.from(mapState.polylines);
+
+            if (!mapState.showMyRoute) {
+              polylines.removeWhere((key, value) => key == 'myRoute');
+            }
+
+            return SingleChildScrollView(
+                child: Stack(
+              children: [
+                MapView(
+                    initialLocation: locationState.lastKnownLocation!,
+                    polylines: polylines.values.toSet()),
+              ],
+            ));
+          },
+        );
       }),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       floatingActionButton: Column(
         mainAxisAlignment: MainAxisAlignment.end,
-        children: const [BtnCurrentLocation()],
+        children: const [
+          BtnToggleUserRoute(),
+          BtnFollowUser(),
+          BtnCurrentLocation()
+        ],
       ),
     );
   }
