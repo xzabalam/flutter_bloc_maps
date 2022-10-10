@@ -112,7 +112,7 @@ class MapBloc extends Bloc<MapEvent, MapState> {
         kms.toInt(), destination.endPlaceInformation.text);
 
     final startMarker = Marker(
-        anchor: const Offset(0.065, 0.89),
+        anchor: const Offset(0.0665, 0.865),
         markerId: const MarkerId('start'),
         position: destination.points.first,
         icon: startMaker);
