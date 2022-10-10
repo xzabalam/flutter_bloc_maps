@@ -1,22 +1,4 @@
-# flutter_maps_app
-
-A new Flutter project.
-
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
-
----
-
+# Flutter - Google Maps - MapBox
 Se debe crear los siguientes archivos en las siguientes rutas,
 
 > android/app/src/main/AndroidManifest.xml
@@ -113,8 +95,6 @@ import Flutter
 # API Keys Security Checklist
 Para generar el archivo env.g.dart se debe seguir los siguientes pasos:
 
-If you choose to use .env files with the ENVied package, follow these steps to secure your API keys:
-
 1. En la ruta del proyecto se debe crear un archivo de propiedades, en este archivo se almacenará los API KEYS en texto plano.
 
 >.env
@@ -168,7 +148,7 @@ $ flutter pub run build_runner build --delete-conflicting-outputs
 import 'package:flutter_maps_app/config/env/env.dart';
 
 final urlSearchMapBoxApi = Env.urlMapBoxApi;
-final url = '${Env.urlMapBoxApi}?access_token=${Env.mapBoxApiKe}';
+final url = '${Env.urlMapBoxApi}?access_token=${Env.mapBoxApiKey}';
 ```
 
 # Referencias
