@@ -107,3 +107,22 @@ import Flutter
   }
 }
 ```
+
+En la ruta del proyecto se debe crear un archivo de propiedades 
+
+>.env
+
+```properties
+MAP_BOX_ACCESS_TOKEN=${API_KEY_DE_MAPBOX}
+URL_MAP_BOX_API=https://api.mapbox.com/directions/v5/mapbox
+```
+
+Para asegurar las apis de google, mapbox, se usa
+https://codewithandrea.com/articles/flutter-api-keys-dart-define-env-files/
+
+Para convertir json a DTO se usa
+https://app.quicktype.io/
+
+Api de MapBox
+https://docs.mapbox.com/playground/directions/
+

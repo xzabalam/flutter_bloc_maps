@@ -13,7 +13,6 @@ class LocationBloc extends Bloc<LocationEvent, LocationState> {
 
   LocationBloc() : super(const LocationState()) {
     on<OnNewUserLocationEvent>((event, emit) {
-      print('state: ${state.myLocationHistory.length}');
       emit(state.copyWith(
           lastKnownLocation: event.newLocation,
           myLocationHistory: [...state.myLocationHistory, event.newLocation]));
@@ -37,8 +36,6 @@ class LocationBloc extends Bloc<LocationEvent, LocationState> {
     _positionStreamSubscription =
         Geolocator.getPositionStream().listen((event) {
       final position = event;
-
-      print('position: $position');
 
       add(OnNewUserLocationEvent(
           LatLng(position.latitude, position.longitude)));
