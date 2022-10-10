@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_maps_app/blocs/blocs.dart';
 import 'package:flutter_maps_app/models/responses/places/feature.dart';
 import 'package:flutter_maps_app/models/responses/places/places_model.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart' show LatLng;
 
 import '../models/models.dart';
 

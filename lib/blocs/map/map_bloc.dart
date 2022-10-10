@@ -4,11 +4,10 @@ import 'dart:convert';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_maps_app/enumerations/enumerations.dart';
-import 'package:flutter_maps_app/helpers/helpers.dart';
 import 'package:flutter_maps_app/theme/themes.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
+import '../../helpers/helpers.dart';
 import '../../models/models.dart';
 import '../blocs.dart';
 
@@ -27,6 +26,9 @@ class MapBloc extends Bloc<MapEvent, MapState> {
   formatDurationToString(Duration d) =>
       d.toString().split('.').first.padLeft(8, "0");
 
+  /**
+   * MapBloc onEvents
+   */
   MapBloc({required this.locationBloc}) : super(const MapState()) {
     on<OnMapInitializedEvent>(_onInitMap);
 
@@ -99,31 +101,26 @@ class MapBloc extends Bloc<MapEvent, MapState> {
       endCap: Cap.roundCap,
     );
 
-    double kms = ((destination.distance / 10).floorToDouble()) / 100;
-    String tripDuration =
-        formatDurationToString(Duration(seconds: destination.duration.toInt()));
+    double kms = destination.distance / 1000;
+    kms = (kms * 100).floorToDouble();
+    kms /= 100;
 
-    final initCustomMarker =
-        await getAssetImageMarker(AssetsMarkersEnum.inicialMarker.value);
+    int tripDuration = (destination.duration / 60).floorToDouble().toInt();
+
+    final startMaker = await getStartCustomMarker(tripDuration, 'Mi ubicación');
+    final endMaker = await getEndCustomMarker(
+        kms.toInt(), destination.endPlaceInformation.text);
 
     final startMarker = Marker(
+        anchor: const Offset(0.065, 0.89),
         markerId: const MarkerId('start'),
         position: destination.points.first,
-        icon: initCustomMarker,
-        infoWindow: InfoWindow(
-            title: 'Inicio',
-            snippet: 'Distancia: $kms Km, Duración: $tripDuration.'));
-
-    final finalCustomMarker =
-        await getAssetImageMarker(AssetsMarkersEnum.finalMarker.value);
+        icon: startMaker);
 
     final endMarker = Marker(
         markerId: const MarkerId('end'),
         position: destination.points.last,
-        icon: finalCustomMarker,
-        infoWindow: InfoWindow(
-            title: '${destination.endPlaceInformation.text}',
-            snippet: '${destination.endPlaceInformation.placeName}'));
+        icon: endMaker);
 
     final currentPolylines = Map<String, Polyline>.from(state.polylines);
     currentPolylines['route'] = myRoute;
@@ -133,9 +130,6 @@ class MapBloc extends Bloc<MapEvent, MapState> {
     currentMarkers['end'] = endMarker;
 
     add(DisplayPolylinesEvent(currentPolylines, currentMarkers));
-
-    await Future.delayed(const Duration(milliseconds: 300));
-    _mapController?.showMarkerInfoWindow(const MarkerId('start'));
   }
 
   void moveCamera(LatLng newLocation) {
